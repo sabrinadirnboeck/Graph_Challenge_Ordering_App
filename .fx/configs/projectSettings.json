@@ -1,0 +1,77 @@
+{
+    "appName": "Ordering_Tab",
+    "version": "2.1.0",
+    "isFromSample": true,
+    "solutionSettings": {
+        "name": "fx-solution-azure",
+        "version": "1.0.0",
+        "hostType": "Azure",
+        "azureResources": [
+            "function"
+        ],
+        "capabilities": [
+            "Tab",
+            "TabSSO"
+        ],
+        "activeResourcePlugins": [
+            "fx-resource-local-debug",
+            "fx-resource-appstudio",
+            "fx-resource-cicd",
+            "fx-resource-api-connector",
+            "fx-resource-aad-app-for-teams",
+            "fx-resource-frontend-hosting",
+            "fx-resource-identity",
+            "fx-resource-function"
+        ]
+    },
+    "programmingLanguage": "typescript",
+    "defaultFunctionName": "getUserProfile",
+    "projectId": "d1ed4036-2073-4754-9615-6d45df4089a1",
+    "components": [
+        {
+            "name": "aad-app",
+            "provision": true,
+            "deploy": true
+        },
+        {
+            "hosting": "azure-storage",
+            "name": "teams-tab",
+            "build": true,
+            "provision": true,
+            "folder": "tabs",
+            "sso": true,
+            "deploy": true
+        },
+        {
+            "name": "azure-storage",
+            "connections": [
+                "teams-tab"
+            ],
+            "provision": true
+        },
+        {
+            "name": "identity"
+        },
+        {
+            "name": "teams-api",
+            "hosting": "azure-function",
+            "functionNames": [
+                "getUserProfile"
+            ],
+            "build": true,
+            "folder": "api",
+            "deploy": true,
+            "artifactFolder": "api"
+        },
+        {
+            "name": "azure-function",
+            "scenario": "Api",
+            "connections": [
+                "identity",
+                "aad-app",
+                "teams-tab",
+                "teams-api"
+            ]
+        }
+    ]
+}
